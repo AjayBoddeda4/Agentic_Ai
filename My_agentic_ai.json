@@ -1,0 +1,273 @@
+{
+  "name": "My workflow 5",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Be a Job ready",
+        "formDescription": "Get a job in 6 months with trending skills",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "please enter your name",
+              "placeholder": "Name",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "What course you wants to enroll",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Data Engineering"
+                  },
+                  {
+                    "option": "Machine Learning"
+                  },
+                  {
+                    "option": "Agentic Ai"
+                  },
+                  {
+                    "option": "Generative Ai"
+                  }
+                ]
+              },
+              "multiselect": true,
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "349ed3c0-82c7-4902-b173-095a28472fa1",
+      "name": "On form submission",
+      "webhookId": "3f2af8de-12c1-4b47-99a5-ee2f64b87a26"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appWV1d5MUlgzxMbc",
+          "mode": "list",
+          "cachedResultName": "courses_db",
+          "cachedResultUrl": "https://airtable.com/appWV1d5MUlgzxMbc"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblY4F3byqjO1LrZG",
+          "mode": "list",
+          "cachedResultName": "Table 1",
+          "cachedResultUrl": "https://airtable.com/appWV1d5MUlgzxMbc/tblY4F3byqjO1LrZG"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $json['please enter your name'] }}",
+            "course": "={{ $json['What course you wants to enroll'][0] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "course",
+              "displayName": "course",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        220,
+        0
+      ],
+      "id": "bbd3d8f4-5ffc-4927-a5d4-93652b1d52cf",
+      "name": "Create a record",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "Gsb5PN6HltX54zDG",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appWV1d5MUlgzxMbc",
+          "mode": "list",
+          "cachedResultName": "courses_db",
+          "cachedResultUrl": "https://airtable.com/appWV1d5MUlgzxMbc"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblY4F3byqjO1LrZG",
+          "mode": "list",
+          "cachedResultName": "Table 1",
+          "cachedResultUrl": "https://airtable.com/appWV1d5MUlgzxMbc/tblY4F3byqjO1LrZG"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        440,
+        0
+      ],
+      "id": "29f9cdc6-f199-4a2e-bdcb-fe0a519aa82a",
+      "name": "Search records",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "Gsb5PN6HltX54zDG",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "toText",
+        "sourceProperty": "Name",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        660,
+        0
+      ],
+      "id": "a88baa59-7c88-402d-886c-6e525378ebd3",
+      "name": "Convert to File"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "/Users/ajayboddeda/desktop/n8n.txt",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        880,
+        0
+      ],
+      "id": "c085e4ff-43ef-47c0-972c-12302a530d5d",
+      "name": "Read/Write Files from Disk"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 1
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        380
+      ],
+      "id": "45bd001f-054e-4547-ad27-490752d5042f",
+      "name": "Schedule Trigger"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Create a record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a record": {
+      "main": [
+        [
+          {
+            "node": "Search records",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search records": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Search records",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "f713d383-d95e-4db2-ad87-c733284d9395",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "9be320877519bd7e18b1db59a678722785d2275f1e9f3e0b3160f8ed42737859"
+  },
+  "id": "WjDzBQCybSEWmEjE",
+  "tags": []
+}
